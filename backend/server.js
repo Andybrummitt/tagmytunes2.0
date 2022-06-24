@@ -47,11 +47,12 @@ app.post("/upload/:uuid", upload.array("files", 100), async (req, res) => {
   //  CREATE NEW ZIP FOLDER & PATH
   const zip = new AdmZip();
   const zipPath = `zipfiles/${req.params.uuid}.zip`;
+  let filePath;
 
   //  LOOP OVER FILES
   for(let file of req.files){
     let fileName = file.originalname;
-    
+
     //  IF REMOVE-CUSTOM-STRINGS - PARSE STRING
     if(req.body['custom-strings']){
       let customStringsArr = req.body['custom-strings'].split(",")
@@ -68,7 +69,7 @@ app.post("/upload/:uuid", upload.array("files", 100), async (req, res) => {
       // RENAME FILE & CHANGE FILE PATH
       fileName = parseY2mateString(fileName);
     }
-    let filePath = `uploads/${req.params.uuid}/${fileName}`;
+    filePath = `uploads/${req.params.uuid}/${fileName}`;
     fs.renameSync(file.path, filePath);
     //  WRITE NEW ID3 TAGS
     const tags = getTags(fileName);
@@ -81,8 +82,18 @@ app.post("/upload/:uuid", upload.array("files", 100), async (req, res) => {
     // res.setHeader('Content-Type', 'application/zip');
     // res.setHeader('Content-Disposition', `inline; filename=${zipPath}`);
     // stream.pipe(res);
+
+    //  SEND ZIP FILE IN RESPONSE
     res.download(zipPath, (err) => {
-      if(err) console.log(err)
+      if(err) throw new Error("Something went wrong"); 
+      //  DELETE FILES FROM SERVER
+      console.log(filePath)
+      fs.rm(`uploads/${req.params.uuid}`, { recursive: true, force: true }, (err) => {
+        if(err) console.log(err)
+      });
+      fs.unlink(zipPath, (err) => {
+        if(err) console.log(err)
+      });
     })
 });
 
