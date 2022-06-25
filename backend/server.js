@@ -1,13 +1,16 @@
 const express = require("express");
 const multer = require("multer");
 const fs = require("fs");
-const path = require("path");
-const getTags = require("./functions/getTags");
-
 const NodeID3 = require("node-id3");
-
 const AdmZip = require("adm-zip");
-const { parseStringCommonSuffixes, parseStringCustomStrings, parseY2mateString } = require("./functions/parseStringFromUserOptions");
+
+const getTags = require("./functions/getTags");
+const apiErrorHandler = require("./error/apiErrorHandler");
+const {
+  parseStringCommonSuffixes,
+  parseStringCustomStrings,
+  parseY2mateString,
+} = require("./functions/parseStringFromUserOptions");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -29,8 +32,8 @@ const storage = multer.diskStorage({
     }
   },
   filename: (req, file, cb) => {
-    cb(null, file.originalname)
-  }
+    cb(null, file.originalname);
+  },
 });
 
 const upload = multer({ storage: storage });
@@ -39,44 +42,48 @@ const port = 5000;
 
 const app = express();
 
-app.use(express.static('public'));
+app.use(express.static("public"));
 
 app.use(express.json());
 
 app.post("/upload/:uuid", upload.array("files", 100), async (req, res) => {
-  //  CREATE NEW ZIP FOLDER & PATH
-  const zip = new AdmZip();
-  const zipPath = `zipfiles/${req.params.uuid}.zip`;
-  let filePath;
-
-  //  LOOP OVER FILES
-  for(let file of req.files){
-    let fileName = file.originalname;
-
-    //  IF REMOVE-CUSTOM-STRINGS - PARSE STRING
-    if(req.body['custom-strings']){
-      let customStringsArr = req.body['custom-strings'].split(",")
-      // RENAME FILE & CHANGE FILE PATH
-      fileName = parseStringCustomStrings(fileName, customStringsArr)
-    }
-    //  IF REMOVE-COMMON-SUFFIXES CHECKBOX IS CHECKED - PARSE STRING 
-    if(req.body['remove-common-suffixes']){
-      // RENAME FILE & CHANGE FILE PATH
-      fileName = parseStringCommonSuffixes(fileName);
-    }
-    if(req.body['remove-y2mate-string']){
-      console.log('is y2 mate')
-      // RENAME FILE & CHANGE FILE PATH
-      fileName = parseY2mateString(fileName);
-    }
-    filePath = `uploads/${req.params.uuid}/${fileName}`;
-    fs.renameSync(file.path, filePath);
-    //  WRITE NEW ID3 TAGS
-    const tags = getTags(fileName);
-    const success = NodeID3.write(tags, filePath);
-    zip.addLocalFile(filePath);
+  if (!req.files) {
+    next(ApiError.badRequest("Please include file(s)."));
+    return;
   }
-    zip.writeZip(zipPath, zip.toBuffer())
+  try {
+    //  CREATE NEW ZIP FOLDER & PATH
+    const zip = new AdmZip();
+    const zipPath = `zipfiles/${req.params.uuid}.zip`;
+    let filePath;
+
+    //  LOOP OVER FILES
+    for (let file of req.files) {
+      let fileName = file.originalname;
+
+      //  IF REMOVE-CUSTOM-STRINGS - PARSE STRING
+      if (req.body["custom-strings"]) {
+        let customStringsArr = req.body["custom-strings"].split(",");
+        // RENAME FILE & CHANGE FILE PATH
+        fileName = parseStringCustomStrings(fileName, customStringsArr);
+      }
+      //  IF REMOVE-COMMON-SUFFIXES CHECKBOX IS CHECKED - PARSE STRING
+      if (req.body["remove-common-suffixes"]) {
+        // RENAME FILE & CHANGE FILE PATH
+        fileName = parseStringCommonSuffixes(fileName);
+      }
+      if (req.body["remove-y2mate-string"]) {
+        // RENAME FILE & CHANGE FILE PATH
+        fileName = parseY2mateString(fileName);
+      }
+      filePath = `uploads/${req.params.uuid}/${fileName}`;
+      fs.renameSync(file.path, filePath);
+      //  WRITE NEW ID3 TAGS
+      const tags = getTags(fileName);
+      const success = NodeID3.write(tags, filePath);
+      zip.addLocalFile(filePath);
+    }
+    zip.writeZip(zipPath, zip.toBuffer());
     // const stream = fs.createReadStream(`${zipPath}`);
 
     // res.setHeader('Content-Type', 'application/zip');
@@ -85,17 +92,21 @@ app.post("/upload/:uuid", upload.array("files", 100), async (req, res) => {
 
     //  SEND ZIP FILE IN RESPONSE
     res.download(zipPath, (err) => {
-      if(err) throw new Error("Something went wrong"); 
+      if (err) throw new Error("Something went wrong");
       //  DELETE FILES FROM SERVER
-      console.log(filePath)
       fs.rm(`uploads/${req.params.uuid}`, { recursive: true, force: true }, (err) => {
         if(err) console.log(err)
       });
       fs.unlink(zipPath, (err) => {
         if(err) console.log(err)
       });
-    })
+    });
+  } catch (err) {
+    next(ApiError.badRequest("Sorry, something went wrong."));
+  }
 });
+
+app.use(apiErrorHandler);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
