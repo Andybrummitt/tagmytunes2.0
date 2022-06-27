@@ -1,7 +1,10 @@
 import { useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
+import CommonSuffixesListToggle from "../CommonSuffixesListToggle/CommonSuffixesListToggle.component";
 import FormGroup from "../FormGroup/FormGroup";
 import ListOfRemovedStrings from "../ListOfRemovedStrings/ListOfRemovedStrings";
+import LoadingSpinner from "../LoadingSpinner.component";
+import Y2MateDescriptionToggle from "../Y2MateDescriptionToggle/Y2MateDescriptionToggle.component";
 
 const FileUploadForm = () => {
   const formRef = useRef(null);
@@ -13,9 +16,11 @@ const FileUploadForm = () => {
   const [customString, setCustomString] = useState("");
   const [customStrings, setCustomStrings] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [ error, setError ] = useState(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setError(null);
     const formData = new FormData(formRef.current);
     const uuid = uuidv4();
     formData.append("custom-strings", customStrings);
@@ -31,7 +36,7 @@ const FileUploadForm = () => {
         setBlob(url);
         setLoading(false);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => setError(err));
   };
 
   const handleChangeCommonSuffixes = (e) =>
@@ -50,9 +55,10 @@ const FileUploadForm = () => {
 
   return (
     <div>
+    {error && <p className="error-mssg">{error.message}</p>}
       <form onSubmit={handleSubmit} ref={formRef}>
         <div className="form-group">
-          <label htmlFor="files">Select files:</label>
+          <label htmlFor="files">Select up to 100 file(s):</label>
           <input
             type="file"
             id="files"
@@ -69,6 +75,7 @@ const FileUploadForm = () => {
           handleChange={handleChangeCommonSuffixes}
           labelText={"Remove Common Suffixes"}
         />
+        <CommonSuffixesListToggle />
         <FormGroup
           type={"checkbox"}
           value={options.y2mate}
@@ -76,6 +83,7 @@ const FileUploadForm = () => {
           handleChange={handleChangeY2Mate}
           labelText={"Remove Y2Mate Code"}
         />
+        <Y2MateDescriptionToggle />
         <FormGroup
           type={"text"}
           value={customString}
@@ -90,7 +98,7 @@ const FileUploadForm = () => {
         />
         <input type="submit" value="Submit" />
       </form>
-      {loading && <p>Loading...</p>}
+      {loading && <LoadingSpinner />}
       {blob && (
         <a onClick={() => setBlob(null)} href={blob}>
           Download ZIP FILE

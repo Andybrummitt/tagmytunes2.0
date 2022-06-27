@@ -1,0 +1,1 @@
+export const commonSuffixes = ['(Official Music Video)', '[Official Music Video]', '(Music Video)', '[Music Video]', '(Lyric Video)', '[Lyric Video]', '(Lyrics)', '[Lyrics]', '(Audio)', '[Audio]', '(Official Audio)', '[Official Audio]', '(hd)', '[hd]', '(hq)', '[hq]'];

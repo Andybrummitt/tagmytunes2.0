@@ -3,6 +3,8 @@ const multer = require("multer");
 const fs = require("fs");
 const NodeID3 = require("node-id3");
 const AdmZip = require("adm-zip");
+const cluster = require("cluster");
+const os = require("os");
 
 const getTags = require("./functions/getTags");
 const apiErrorHandler = require("./error/apiErrorHandler");
@@ -80,16 +82,11 @@ app.post("/upload/:uuid", upload.array("files", 100), async (req, res) => {
       fs.renameSync(file.path, filePath);
       //  WRITE NEW ID3 TAGS
       const tags = getTags(fileName);
+      console.log(tags)
       const success = NodeID3.write(tags, filePath);
       zip.addLocalFile(filePath);
     }
     zip.writeZip(zipPath, zip.toBuffer());
-    // const stream = fs.createReadStream(`${zipPath}`);
-
-    // res.setHeader('Content-Type', 'application/zip');
-    // res.setHeader('Content-Disposition', `inline; filename=${zipPath}`);
-    // stream.pipe(res);
-
     //  SEND ZIP FILE IN RESPONSE
     res.download(zipPath, (err) => {
       if (err) throw new Error("Something went wrong");
@@ -108,6 +105,16 @@ app.post("/upload/:uuid", upload.array("files", 100), async (req, res) => {
 
 app.use(apiErrorHandler);
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
-});
+if(cluster.isMaster) {
+  const NumberOfWorkers = os.cpus().length;
+  for(let i = 0; i < NumberOfWorkers; i++){
+    cluster.fork()
+  }
+}
+else {
+  app.listen(port, () => {
+    console.log(`Example app listening on port ${port}`);
+  });
+}
+
+
