@@ -4,10 +4,15 @@ import "./y2MateDescriptionToggle.scss";
 const Y2MateDescriptionToggle = () => {
   const [showY2MateDescription, setShowY2MateDescription] = useState(false);
 
+
+  const toggleText = showY2MateDescription
+  ? "Hide Y2Mate Information"
+  : "What is Y2Mate Code?";
+
   return (
     <div>
       <p className="blue-underline" onClick={() => setShowY2MateDescription(!showY2MateDescription)}>
-        What is Y2Mate Code?
+        {toggleText}
       </p>
       {showY2MateDescription && (
         <p>

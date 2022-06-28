@@ -1,15 +1,9 @@
 import React from 'react';
-import BarLoader from "react-spinners/BarLoader";
-
-const override = {
-    display: "block",
-    margin: "0 auto",
-    borderColor: "red",
-  };
+import MoonLoader from "react-spinners/MoonLoader";
 
 const LoadingSpinner = ({loading}) => {
   return (
-    <BarLoader loading={loading} cssOverride={override} size={150} />
+    <MoonLoader speedMultiplier={0.5} loading={loading} size={150} />
   )
 }
 
