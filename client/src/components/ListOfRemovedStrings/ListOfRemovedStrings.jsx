@@ -8,15 +8,16 @@ const ListOfRemovedStrings = ({ customStrings, setCustomStrings }) => {
   };
 
   return (
-    <div className="container">
-      <ul>
+    <div className="container mt-5 mb-5">
+    <h5 className="text-center">{customStrings.length > 0 && 'List of removed custom text'}</h5>
+    <ol className="list-group list-group-numbered">
         {customStrings.map((string) => (
-          <li key={uuidv4()}>
-            <span>{string}</span>
-            <button onClick={(e) => handleRemove(string)}>Remove</button>
+          <li className="list-group-item d-flex align-items-start" key={uuidv4()}>
+            <span className="ms-3 fw-bold">{string}</span>
+            <button className="btn btn-sm btn-danger ms-auto" onClick={() => handleRemove(string)}>Remove</button>
           </li>
         ))}
-      </ul>
+      </ol>
     </div>
   );
 };

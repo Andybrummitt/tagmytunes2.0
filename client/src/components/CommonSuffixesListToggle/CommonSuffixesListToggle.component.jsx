@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { commonSuffixes } from "../../commonSuffixes";
-import "./commonSuffixesListToggle.scss";
 
 const CommonSuffixesListToggle = () => {
   const [showCommonSuffixes, setShowCommonSuffixes] = useState(false);
@@ -17,14 +16,16 @@ const CommonSuffixesListToggle = () => {
       </p>
       {showCommonSuffixes && (
         <div className="common-suffixes-list">
+          <h5>List of common suffixes</h5>
           <ul>
             {commonSuffixes.map((suffix) => (
               <li key={uuidv4()}>{suffix}</li>
             ))}
           </ul>
-          <p>
+          <p className="text-warning"><strong>
             Removing common suffixes will remove both capitalized and lowercase
             suffixes.
+            </strong>
           </p>
         </div>
       )}

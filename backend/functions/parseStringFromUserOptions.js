@@ -6,9 +6,9 @@ const parseStringCommonSuffixes = (string) => {
 };
 
 const parseStringCustomStrings = (fileName, strings) => {
-  let parsedFileName;
+  let parsedFileName = fileName;
   for (let string of strings) {
-    parsedFileName = fileName.replace(string, "");
+    if(string.length <= 40) parsedFileName = fileName.replace(string, "");
   }
   return parsedFileName;
 };

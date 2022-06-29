@@ -1,10 +1,8 @@
 import { useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import CommonSuffixesListToggle from "../CommonSuffixesListToggle/CommonSuffixesListToggle.component";
 import CheckboxFormGroup from "../CheckboxFormGroup/CheckboxFormGroup";
 import ListOfRemovedStrings from "../ListOfRemovedStrings/ListOfRemovedStrings";
 import LoadingSpinner from "../LoadingSpinner.component";
-import Y2MateDescriptionToggle from "../Y2MateDescriptionToggle/Y2MateDescriptionToggle.component";
 
 const FileUploadForm = () => {
   const formRef = useRef(null);
@@ -17,6 +15,7 @@ const FileUploadForm = () => {
   const [customStrings, setCustomStrings] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [customTextError, setCustomTextError] = useState(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -56,19 +55,31 @@ const FileUploadForm = () => {
 
   const handleSubmitString = (e) => {
     e.preventDefault();
+    if(customStrings.length >= 10){
+      setCustomTextError('You can only remove up to 10 custom texts at a time.')
+      return;
+    }
+    console.log(customStrings)
+    if(customStrings.includes(customString)){
+      console.log('whatds')
+      setCustomTextError('You\'ve already included that text');
+      return;
+    }
     if (customString) {
       setCustomStrings([...customStrings, customString]);
       setCustomString("");
+      setCustomTextError(null);
     }
-  };
+  }
 
   return (
-    <div className="container-lg d-flex justify-content-center">
+    <div className=" col-lg-4 h-50 d-flex justify-content-center  m-5">
       {error && <p className="text-danger">{error.message}</p>}
-      <div className="col-lg-6">
-        <form onSubmit={handleSubmit} ref={formRef}>
+      <div className="col-lg-12">
+        <h2 className="text-center mb-3">File Upload</h2>
+        <form onSubmit={handleSubmit} ref={formRef} className="bg-white rounded p-5 shadow">
           <div className="form-group">
-            <label className="form-label" htmlFor="files">
+            <label className="form-label mt-3" htmlFor="files">
               Select up to 100 file(s):
             </label>
             <input
@@ -81,39 +92,45 @@ const FileUploadForm = () => {
               required
             />
           </div>
-          <CheckboxFormGroup
-            value={options.removeCommonSuffixes}
-            name={"remove-common-suffixes"}
-            handleChange={handleChangeCommonSuffixes}
-            labelText={"Remove Common Suffixes"}
-          />
-          <CheckboxFormGroup
-            value={options.y2mate}
-            name={"remove-y2mate-string"}
-            handleChange={handleChangeY2Mate}
-            labelText={"Remove Y2Mate Code"}
-          />
-          <div className="form-control">
+          <ul className="list-group mt-3">
+            <CheckboxFormGroup
+              value={options.removeCommonSuffixes}
+              name={"remove-common-suffixes"}
+              handleChange={handleChangeCommonSuffixes}
+              labelText={"Remove Common Suffixes"}
+            />
+            <CheckboxFormGroup
+              value={options.y2mate}
+              name={"remove-y2mate-string"}
+              handleChange={handleChangeY2Mate}
+              labelText={"Remove Y2Mate Code"}
+            />
+          </ul>
+          <div className="form-control mt-3">
             <label htmlFor="remove-custom-string" className="mr-1">Custom text to remove:</label>
             <div className="input-group mb-3">
             <input
+              className="p-2"
               type="text"
               value={customString}
               name="remove-custom-strings"
               id="remove-custom-strings"
+              maxLength="40"
               onChange={handleChangeCustomString}
+              style={{ width: '75%' }}
             />
-            <button className="btn btn-outline-secondary" onClick={handleSubmitString}>Add text</button>
+            <button className="btn btn-outline-primary" onClick={handleSubmitString} style={{ width: '25%' }}>Add text</button>
+            {customTextError && <p className="text-danger">{customTextError}</p>} 
             </div>
           </div>
           <ListOfRemovedStrings
             customStrings={customStrings}
             setCustomStrings={setCustomStrings}
           />
-          <button className="btn btn-primary" type="submit">Submit</button>
+          <div className="text-center">
+            <button className="btn btn-lg btn-success col-6 fw-bold" type="submit">TAG MY TUNES</button>
+          </div>
         </form>
-        <Y2MateDescriptionToggle />
-        <CommonSuffixesListToggle />
         {loading && <LoadingSpinner />}
         {blob && (
           <a onClick={() => setBlob(null)} href={blob}>

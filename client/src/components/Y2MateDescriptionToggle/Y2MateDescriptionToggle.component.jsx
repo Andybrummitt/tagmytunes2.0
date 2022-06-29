@@ -1,5 +1,4 @@
 import { useState } from "react";
-import "./y2MateDescriptionToggle.scss";
 
 const Y2MateDescriptionToggle = () => {
   const [showY2MateDescription, setShowY2MateDescription] = useState(false);

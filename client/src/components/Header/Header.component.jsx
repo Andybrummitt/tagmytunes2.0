@@ -2,7 +2,7 @@ import React from 'react'
 
 const Header = () => {
   return (
-    <div>
+    <div style={{ background: 'grey', color: 'white' }}>
         <h2>TagMyTunes.com</h2>
         <p>Alter your file names from converted mp3s!</p>
         <p>Populate artist and song name fields correctly!</p>
