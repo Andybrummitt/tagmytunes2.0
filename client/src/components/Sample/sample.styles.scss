@@ -1,9 +1,13 @@
 #sample-container {
-    img {
-        height: 4rem;
-        width: auto;
+    .sample-img-container {
+        border: 0.2rem solid #16a1e1;
     }
-    .inner-sample-container {
-        background: red;
+}
+
+@media screen and (min-width: 768px){
+    #sample-container {
+        p {
+            font-size: 1.5rem;
+        }
     }
 }

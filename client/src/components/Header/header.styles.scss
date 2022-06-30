@@ -3,6 +3,7 @@
 .header {
     background-color: #131a1f;
     height: 10vh;
+    min-width: 50px;
     border-bottom: 0.25rem solid white;
     h1 {
         font-family: 'Righteous', cursive;
@@ -10,7 +11,7 @@
     }
     span {
         font-size: 1.5rem;
-        margin: 0 2rem;
+        margin: 0 0.5rem;
     }
 }
 
@@ -18,6 +19,7 @@
     .header {
         h1, span {
             font-size: 3rem;
+            margin: 0 2rem;
         }
     }
 }

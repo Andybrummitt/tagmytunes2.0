@@ -1,9 +1,9 @@
 import React from 'react';
-import MoonLoader from "react-spinners/MoonLoader";
+import ScaleLoader from "react-spinners/ScaleLoader";
 
 const LoadingSpinner = ({loading}) => {
   return (
-    <MoonLoader speedMultiplier={0.5} loading={loading} size={150} />
+    <ScaleLoader color={"#FFFFFF"} loading={loading} size={150} />
   )
 }
 

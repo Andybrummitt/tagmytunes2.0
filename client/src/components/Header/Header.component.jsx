@@ -7,8 +7,6 @@ const Header = () => {
         <span>&#127911;</span>
         <h1 className="text-white mt-3 mb-3">TagMyTunes.com</h1>
         <span>&#127911;</span>
-        {/* <p>Alter your file names from converted mp3s!</p>
-        <p>Populate artist and song name fields correctly!</p> */}
     </div>
   )
 }

@@ -61,7 +61,6 @@ const FileUploadForm = () => {
       return;
     }
     if(customStrings.includes(customString)){
-      console.log('whatds')
       setCustomTextError('You\'ve already included that text');
       return;
     }
@@ -77,7 +76,7 @@ const FileUploadForm = () => {
     <div className="d-flex">
       {loading && (
       <div className="d-flex flex-column align-items-center justify-content-center">
-        <p className="text-center fw-bold">Loading..</p>
+        <p className="text-center fw-bold text-white">Loading...</p>
         <LoadingSpinner />
       </div> 
       )}
@@ -142,13 +141,13 @@ const FileUploadForm = () => {
             {customTextError && <p className="text-danger">{customTextError}</p>} 
             </div>
           </div>
+          <div className="text-center">
+            <button className="btn btn-lg btn-success col-12 fw-bold" type="submit">TAG MY TUNES</button>
+          </div>
           <ListOfRemovedStrings
             customStrings={customStrings}
             setCustomStrings={setCustomStrings}
           />
-          <div className="text-center">
-            <button className="btn btn-lg btn-success col-6 fw-bold" type="submit">TAG MY TUNES</button>
-          </div>
         </form>
       </div>
     )}  
