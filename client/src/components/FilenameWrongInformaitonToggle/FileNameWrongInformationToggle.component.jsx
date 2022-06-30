@@ -20,7 +20,7 @@ const FileNameWrongInformationToggle = () => {
       </p>
       {showFileNameWrongInformation && (
         <p>
-          Depending on the text format of the filename, the algorithm used will
+          Depending on the text format of the filename, the algorithm used might
           not recognize the artist and title which can lead to some
           discrepancies. This is quite rare however.
         </p>

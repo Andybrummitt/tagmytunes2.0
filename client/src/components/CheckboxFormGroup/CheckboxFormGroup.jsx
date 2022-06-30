@@ -18,7 +18,7 @@ const CheckboxFormGroup = ({labelText, value, name, handleChange}) => {
             onChange={handleChange}
           />
           <label className="checkbox-label ms-3" htmlFor={name}>{labelText}</label>
-          <span className={`badge ${toggleColor} rounded-pill ms-auto`}>{toggle}</span>
+          <span className={`badge ${toggleColor} rounded-pill d-flex align-items-center ms-auto`}>{toggle}</span>
       </div>
     </li>
   )

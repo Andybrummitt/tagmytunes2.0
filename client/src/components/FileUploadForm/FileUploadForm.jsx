@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import CheckboxFormGroup from "../CheckboxFormGroup/CheckboxFormGroup";
 import ListOfRemovedStrings from "../ListOfRemovedStrings/ListOfRemovedStrings";
 import LoadingSpinner from "../LoadingSpinner.component";
+import "./file-upload-form.scss";
 
 const FileUploadForm = () => {
   const formRef = useRef(null);
@@ -59,7 +60,6 @@ const FileUploadForm = () => {
       setCustomTextError('You can only remove up to 10 custom texts at a time.')
       return;
     }
-    console.log(customStrings)
     if(customStrings.includes(customString)){
       console.log('whatds')
       setCustomTextError('You\'ve already included that text');
@@ -73,11 +73,30 @@ const FileUploadForm = () => {
   }
 
   return (
-    <div className=" col-lg-4 h-50 d-flex justify-content-center  m-5">
-      {error && <p className="text-danger">{error.message}</p>}
-      <div className="col-lg-12">
-        <h2 className="text-center mb-3">File Upload</h2>
-        <form onSubmit={handleSubmit} ref={formRef} className="bg-white rounded p-5 shadow">
+    <div className="col-xl-4 col-md-6 d-flex justify-content-center align-items-center flex-column h-100 mb-5" id="form-container">
+    <div className="d-flex">
+      {loading && (
+      <div className="d-flex flex-column align-items-center justify-content-center">
+        <p className="text-center fw-bold">Loading..</p>
+        <LoadingSpinner />
+      </div> 
+      )}
+      {blob && (
+        <div className="d-flex flex-column">
+          <a className="btn btn-lg btn-success align-self-center" onClick={() => setBlob(null)} href={blob}>
+            Download Zip file and Return to File Upload
+          </a>
+          <button className="btn btn-md btn-outline-danger align-self-center mt-3" onClick={() => setBlob(null)}>
+            Return to File Upload Without Downloading
+          </button>
+        </div>    
+        )}
+    </div>
+    {(!loading && !blob) && (
+      <div className="col-12">
+        <h2 className="text-center mb-3 text-white">File Upload</h2>
+        {error && <h5 className="text-danger text-center">{error.message}</h5>}
+        <form onSubmit={handleSubmit} ref={formRef} className="bg-white rounded p-3 shadow">
           <div className="form-group">
             <label className="form-label mt-3" htmlFor="files">
               Select up to 100 file(s):
@@ -131,13 +150,8 @@ const FileUploadForm = () => {
             <button className="btn btn-lg btn-success col-6 fw-bold" type="submit">TAG MY TUNES</button>
           </div>
         </form>
-        {loading && <LoadingSpinner />}
-        {blob && (
-          <a onClick={() => setBlob(null)} href={blob}>
-            Download ZIP FILE
-          </a>
-        )}
       </div>
+    )}  
     </div>
   );
 };

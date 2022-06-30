@@ -8,7 +8,7 @@ const ListOfRemovedStrings = ({ customStrings, setCustomStrings }) => {
   };
 
   return (
-    <div className="container mt-5 mb-5">
+    <div className="container mt-3 mb-3">
     <h5 className="text-center">{customStrings.length > 0 && 'List of removed custom text'}</h5>
     <ol className="list-group list-group-numbered">
         {customStrings.map((string) => (
