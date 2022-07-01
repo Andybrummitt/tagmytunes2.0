@@ -6,20 +6,19 @@ const { uploadController } = require("./controllers/uploadController");
 const { upload } = require("./multerConfig/multerConfig");
 const path = require("path");
 
-const port = process.env.NODE_ENV === "production" ? process.env.port : 5000;
+const port = process.env.port;
 
 const app = express();
 
-if(process.env.NODE_ENV === "production"){
-  app.use(express.static(path.join(__dirname, '../client/build')));
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../client/build/index.html'))
-  })
-}
+app.use(express.static(path.join(__dirname, '../client/build')));
 
 app.use(express.json());
 
 const use = fn => (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next);
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/build/index.html'))
+})
 
 app.post("/upload/:uuid", upload.array("files", 100), use(uploadController));
 
