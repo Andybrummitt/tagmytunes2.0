@@ -4,10 +4,18 @@ const os = require("os");
 const apiErrorHandler = require("./error/apiErrorHandler");
 const { uploadController } = require("./controllers/uploadController");
 const { upload } = require("./multerConfig/multerConfig");
+const path = require("path");
 
-const port = 5000;
+const port = process.env.NODE_ENV === "production" ? process.env.port : 5000;
 
 const app = express();
+
+if(process.env.NODE_ENV === "production"){
+  app.use(express.static(path.join(__dirname, '../client/build')));
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../client/build/index.html'))
+  })
+}
 
 app.use(express.json());
 
@@ -20,12 +28,12 @@ app.use(apiErrorHandler);
 if(cluster.isMaster) {
   const NumberOfWorkers = os.cpus().length;
   for(let i = 0; i < NumberOfWorkers; i++){
-    cluster.fork()
+    cluster.fork();
   }
 }
 else {
   app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`);
+    console.log(`app listening on port ${port}`);
   });
 }
 

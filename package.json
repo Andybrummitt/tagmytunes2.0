@@ -1,5 +1,13 @@
 {
   "dependencies": {
     "react-spinners": "^0.13.1"
+  },
+  "devDependencies": {
+    "concurrently": "^7.2.2"
+  },
+  "scripts": {
+    "server": "node server.js",
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
   }
 }

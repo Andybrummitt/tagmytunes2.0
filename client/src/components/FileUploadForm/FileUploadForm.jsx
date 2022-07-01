@@ -76,16 +76,16 @@ const FileUploadForm = () => {
     <div className="d-flex">
       {loading && (
       <div className="d-flex flex-column align-items-center justify-content-center">
-        <p className="text-center fw-bold text-white">Loading...</p>
+        <p id="loading-text" className="text-center fw-bold text-white">Tagging your tunes...</p>
         <LoadingSpinner />
       </div> 
       )}
       {blob && (
         <div className="d-flex flex-column">
           <a className="btn btn-lg btn-success align-self-center" onClick={() => setBlob(null)} href={blob}>
-            Download Zip file and Return to File Upload
+            Download Your Tunes and Return to File Upload
           </a>
-          <button className="btn btn-md btn-outline-danger align-self-center mt-3" onClick={() => setBlob(null)}>
+          <button className="btn btn-md btn-danger align-self-center mt-3" onClick={() => setBlob(null)}>
             Return to File Upload Without Downloading
           </button>
         </div>    
@@ -141,7 +141,7 @@ const FileUploadForm = () => {
             {customTextError && <p className="text-danger">{customTextError}</p>} 
             </div>
           </div>
-          <div className="text-center">
+          <div className="text-center mt-4">
             <button className="btn btn-lg btn-success col-12 fw-bold" type="submit">TAG MY TUNES</button>
           </div>
           <ListOfRemovedStrings

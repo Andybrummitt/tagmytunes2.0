@@ -1,9 +1,9 @@
 import React from 'react';
-import ScaleLoader from "react-spinners/ScaleLoader";
+import { ScaleLoader } from "react-spinners";
 
 const LoadingSpinner = ({loading}) => {
   return (
-    <ScaleLoader color={"#FFFFFF"} loading={loading} size={150} />
+    <ScaleLoader color={"#FFFFFF"} loading={loading} width={8} height={50} />
   )
 }
 
