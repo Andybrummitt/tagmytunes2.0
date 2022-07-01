@@ -7,7 +7,7 @@ const getTags = require("../functions/getTags");
 const NodeID3 = require("node-id3");
 const AdmZip = require("adm-zip");
 const fs = require("fs");
-const ApiError = require("../error/ApiError");
+const ApiError = require("../error/apiError");
 
 exports.uploadController = async function (req, res, next) {
   if (req.files.length < 1) {
