@@ -16,7 +16,7 @@ const Y2MateDescriptionToggle = () => {
       {showY2MateDescription && (
         <p>
           The Y2Mate code is a common suffix that adds a long alphanumeric code
-          at the end of the file name. Checking this box will remove the code.
+          at the end of the file name. Checking the box will remove the code.
         </p>
       )}
     </div>
