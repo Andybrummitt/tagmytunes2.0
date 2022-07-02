@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import CheckboxFormGroup from "../CheckboxFormGroup/CheckboxFormGroup";
@@ -8,6 +9,7 @@ import "./file-upload-form.scss";
 const FileUploadForm = () => {
   const formRef = useRef(null);
   const [blob, setBlob] = useState(null);
+  const inputRef = useRef(null);
   const [options, setOptions] = useState({
     removeCommonSuffixes: false,
     y2mate: false,
@@ -20,6 +22,12 @@ const FileUploadForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    for(let file of inputRef.current.files){
+      if(file.type !== "audio/mpeg"){
+        setError({message: 'At least one of the files uploaded is not of type .mp3'});
+        return;
+      }
+    }
     setError(null);
     const formData = new FormData(formRef.current);
     const uuid = uuidv4();
@@ -91,21 +99,22 @@ const FileUploadForm = () => {
         </div>    
         )}
     </div>
+    {error && <h5 className="text-danger text-center">{error.message}</h5>}
     {(!loading && !blob) && (
       <div className="col-12">
         <h2 className="text-center mb-3 text-white">File Upload</h2>
-        {error && <h5 className="text-danger text-center">{error.message}</h5>}
         <form onSubmit={handleSubmit} ref={formRef} className="bg-white rounded p-3 shadow">
           <div className="form-group">
             <label className="form-label mt-3" htmlFor="files">
               Select up to 100 file(s):
             </label>
             <input
+              ref={inputRef}
               className="form-control"
+              accept=".mp3"
               type="file"
               id="files"
               name="files"
-              accept=".mp3"
               multiple
               required
             />
