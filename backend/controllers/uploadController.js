@@ -8,6 +8,7 @@ const NodeID3 = require("node-id3");
 const AdmZip = require("adm-zip");
 const fs = require("fs");
 const ApiError = require("../error/apiError");
+const path = require('path');
 
 exports.uploadController = async function (req, res, next) {
   if (req.files.length < 1) {
@@ -18,7 +19,7 @@ exports.uploadController = async function (req, res, next) {
 
   //  CREATE NEW ZIP FOLDER & PATH
   const zip = new AdmZip();
-  const zipPath = `zipfiles/${req.params.uuid}.zip`;
+  const zipPath = path.join(__dirname, `zipfiles/${req.params.uuid}.zip`);
   let filePath;
 
   //  LOOP OVER FILES
@@ -53,7 +54,7 @@ exports.uploadController = async function (req, res, next) {
     if (err) throw new Error("Something went wrong");
     //  DELETE FILES FROM SERVER
     fs.rm(
-      `uploads/${req.params.uuid}`,
+      (path.join(__dirname, `uploads/${req.params.uuid}`)),
       { recursive: true, force: true },
       (err) => {
         if (err) console.log(err);
