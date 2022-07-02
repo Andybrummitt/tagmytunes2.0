@@ -105,7 +105,7 @@ const FileUploadForm = () => {
               type="file"
               id="files"
               name="files"
-              accept="audio/*"
+              accept=".mp3"
               multiple
               required
             />
