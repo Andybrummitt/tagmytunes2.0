@@ -8,6 +8,8 @@ const path = require("path");
 
 const port = process.env.port || 5000;
 
+console.log('working')
+
 const app = express();
 
 app.use(express.static(path.join(__dirname, '../client/build')));
