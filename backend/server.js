@@ -6,7 +6,7 @@ const { uploadController } = require("./controllers/uploadController");
 const { upload } = require("./multerConfig/multerConfig");
 const path = require("path");
 
-const port = process.env.port || 5000;
+const port = process.env.PORT || 5000;
 
 console.log('working')
 
