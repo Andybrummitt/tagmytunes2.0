@@ -31,6 +31,7 @@ const FileUploadForm = () => {
       body: formData,
     })
       .then((res) => {
+        console.log(res)
         if (!res.ok) {
           return res.json().then((json) => {
             throw new Error(json);
