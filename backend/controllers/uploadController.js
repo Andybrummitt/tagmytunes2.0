@@ -12,7 +12,6 @@ const path = require('path');
 
 exports.uploadController = async function (req, res, next) {
   if (req.files.length < 1) {
-    console.log("wooooooo");
     next(ApiError.badRequest("No files selected"));
     return;
   }
