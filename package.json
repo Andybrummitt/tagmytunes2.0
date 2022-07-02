@@ -11,8 +11,8 @@
     "cross-env": "^7.0.3"
   },
   "scripts": {
-    "start": "node server.js --prefix backend",
-    "heroku-postbuild": "npm install --prefix client && npm run build --prefix client",
+    "start": "cd backend && node server.js",
+    "heroku-postbuild": "cd client && npm install && npm run build",
     "dev": "concurrently \"npm run server\" \"npm run client\""
   }
 }
