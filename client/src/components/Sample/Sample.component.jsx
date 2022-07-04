@@ -1,4 +1,5 @@
 import afterSample from "../../assets/after-sample.png";
+import beforeSample from "../../assets/before-sample.png";
 import "./sample.styles.scss";
 
 const Sample = () => {
@@ -12,7 +13,14 @@ const Sample = () => {
       </p>
       <div className="sample-img-container">
             <img
-            className="border col-12"
+            className="col-12"
+            src={beforeSample}
+            alt="Before sample image"
+            />
+      </div>
+      <div className="sample-img-container">
+            <img
+            className="col-12"
             src={afterSample}
             alt="After sample image"
             />
