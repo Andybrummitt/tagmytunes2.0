@@ -5,9 +5,8 @@
 }
 
 .App {
-    background: url('../assets/polygon-scatter-bg.svg');
-    background-size: cover;
     min-height: 100vh;
+    background: linear-gradient(#131a1f, #079ea8)
 }
 
 @media screen and (min-width: 768px){
